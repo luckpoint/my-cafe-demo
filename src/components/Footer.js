@@ -21,7 +21,7 @@ export function initFooter() {
              <a href="#" class="text-sm text-gray-500 hover:text-gray-900">Contact Us</a>
         </div>
         <p class="text-center text-base text-gray-400">
-          &copy; 2024 My Coffee Company. All rights reserved.
+          &copy; 2024 My Cafe Demo Company. All rights reserved.
         </p>
       </div>
     </div>
