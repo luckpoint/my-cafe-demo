@@ -1,0 +1,103 @@
+{
+    "products": [
+        {
+            "id": "1",
+            "name": "Caffè Latte",
+            "category": "coffee",
+            "description": "Rich espresso balanced with steamed milk and a light layer of foam. A perfect milk-forward espresso drink.",
+            "price": {
+                "short": 370,
+                "tall": 415,
+                "grande": 460,
+                "venti": 505
+            },
+            "image": "https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&q=80&w=600",
+            "customizations": [
+                "Change Milk",
+                "Add Espresso Shot"
+            ]
+        },
+        {
+            "id": "2",
+            "name": "Caramel Macchiato",
+            "category": "coffee",
+            "description": "Freshly steamed milk with vanilla-flavored syrup marked with espresso and topped with a caramel drizzle.",
+            "price": {
+                "short": 380,
+                "tall": 425,
+                "grande": 470,
+                "venti": 515
+            },
+            "image": "/images/caramel-macchiato.png",
+            "customizations": [
+                "Change Milk",
+                "Extra Caramel"
+            ]
+        },
+        {
+            "id": "3",
+            "name": "Iced Passion Tea",
+            "category": "tea",
+            "description": "A blend of hibiscus, lemongrass, and apple, hand-shaken with ice. A refreshing caffeine-free option.",
+            "price": {
+                "short": 300,
+                "tall": 340,
+                "grande": 380,
+                "venti": 420
+            },
+            "image": "https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&q=80&w=600",
+            "customizations": [
+                "Sweetness Level"
+            ]
+        },
+        {
+            "id": "4",
+            "name": "Chocolate Chip Cookie",
+            "category": "food",
+            "description": "A classic buttery cookie loaded with chocolate chips.",
+            "price": {
+                "short": 210,
+                "tall": 210,
+                "grande": 210,
+                "venti": 210
+            },
+            "image": "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&q=80&w=600",
+            "customizations": [
+                "Warmed"
+            ]
+        },
+        {
+            "id": "5",
+            "name": "Matcha Green Tea Latte",
+            "category": "tea",
+            "description": "Smooth and creamy matcha sweetened just right and served with steamed milk.",
+            "price": {
+                "short": 400,
+                "tall": 440,
+                "grande": 480,
+                "venti": 520
+            },
+            "image": "https://images.unsplash.com/photo-1515823664972-6d90e8ed9e85?auto=format&fit=crop&q=80&w=600",
+            "customizations": [
+                "Change Milk",
+                "Extra Matcha"
+            ]
+        },
+        {
+            "id": "6",
+            "name": "Croissant",
+            "category": "food",
+            "description": "A buttery, flaky, croissant that is perfect for breakfast or a snack.",
+            "price": {
+                "short": 270,
+                "tall": 270,
+                "grande": 270,
+                "venti": 270
+            },
+            "image": "https://images.unsplash.com/photo-1555507036-ab1f40388085?auto=format&fit=crop&q=80&w=600",
+            "customizations": [
+                "Warmed"
+            ]
+        }
+    ]
+}
