@@ -22,7 +22,7 @@ export function initHeader() {
           <div class="flex justify-between h-16 items-center">
             <!-- Logo -->
             <div class="flex-shrink-0 flex items-center">
-              <a href="/" class="text-2xl font-bold text-primary tracking-tight">MY COFFEE</a>
+              <a href="/" class="text-2xl font-bold text-primary tracking-tight">MY CAFE DEMO</a>
             </div>
 
             <!-- Desktop Nav -->
