@@ -15,7 +15,8 @@
             "customizations": [
                 "Change Milk",
                 "Add Espresso Shot"
-            ]
+            ],
+            "flag": "This week Special"
         },
         {
             "id": "2",
@@ -81,7 +82,8 @@
             "customizations": [
                 "Change Milk",
                 "Extra Matcha"
-            ]
+            ],
+            "flag": "This week Special"
         },
         {
             "id": "6",
