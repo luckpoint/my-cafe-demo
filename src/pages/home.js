@@ -1,4 +1,5 @@
 import { productService } from '../services/productService.js';
+import { renderSpecialBadge } from '../utils/badge.js';
 
 async function initHome() {
     const app = document.getElementById('app');
@@ -61,8 +62,9 @@ async function initHome() {
         <div class="mt-10 grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:gap-x-8">
             ${featuredProducts.map(product => `
             <div class="group relative bg-white rounded-lg shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col">
-                <div class="w-full h-64 bg-gray-200 aspect-w-1 aspect-h-1 overflow-hidden group-hover:opacity-90 transition-opacity">
+                <div class="w-full h-64 bg-gray-200 aspect-w-1 aspect-h-1 overflow-hidden group-hover:opacity-90 transition-opacity relative">
                     <img src="${product.image}" alt="${product.name}" class="w-full h-full object-center object-cover">
+                    ${renderSpecialBadge(product)}
                 </div>
                 <div class="flex-1 p-6 flex flex-col justify-between">
                     <div>

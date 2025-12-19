@@ -1,4 +1,5 @@
 import { productService } from '../services/productService.js';
+import { renderSpecialBadge } from '../utils/badge.js';
 
 async function initProducts() {
     const app = document.getElementById('app');
@@ -68,6 +69,7 @@ async function initProducts() {
                         <div class="group relative bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col transform hover:-translate-y-1">
                             <div class="aspect-w-1 aspect-h-1 w-full overflow-hidden bg-gray-200 xl:aspect-w-7 xl:aspect-h-8 relative">
                                 <img src="${product.image}" alt="${product.name}" class="w-full h-full object-center object-cover group-hover:opacity-75 transition-opacity duration-300">
+                                ${renderSpecialBadge(product)}
                                 <div class="absolute top-2 right-2 bg-white/90 backdrop-blur-sm rounded-full px-2 py-1 text-xs font-bold text-gray-900 shadow-sm uppercase tracking-wider">
                                     ${product.category}
                                 </div>
@@ -205,6 +207,7 @@ async function initProducts() {
                     <div class="group relative bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col transform hover:-translate-y-1">
                         <div class="aspect-w-1 aspect-h-1 w-full overflow-hidden bg-gray-200 xl:aspect-w-7 xl:aspect-h-8 relative">
                             <img src="${product.image}" alt="${product.name}" class="w-full h-full object-center object-cover group-hover:opacity-75 transition-opacity duration-300">
+                            ${renderSpecialBadge(product)}
                              <div class="absolute top-2 right-2 bg-white/90 backdrop-blur-sm rounded-full px-2 py-1 text-xs font-bold text-gray-900 shadow-sm uppercase tracking-wider">
                                 ${product.category}
                             </div>

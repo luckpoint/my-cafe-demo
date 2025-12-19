@@ -1,5 +1,6 @@
 import { productService } from '../services/productService.js';
 import { cart } from '../utils/cart.js';
+import { renderSpecialBadge } from '../utils/badge.js';
 
 async function initProductDetail() {
     const app = document.getElementById('app');
@@ -40,8 +41,9 @@ async function initProductDetail() {
              <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
                 <div class="md:flex">
                     <!-- Image Section -->
-                    <div class="md:flex-shrink-0 md:w-1/2 bg-gray-100">
+                    <div class="md:flex-shrink-0 md:w-1/2 bg-gray-100 relative">
                         <img class="h-64 w-full object-cover md:h-full" src="${product.image}" alt="${product.name}">
+                        ${renderSpecialBadge(product)}
                     </div>
                     
                     <!-- Content Section -->
