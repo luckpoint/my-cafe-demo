@@ -11,7 +11,7 @@
                 "grande": 460,
                 "venti": 505
             },
-            "image": "https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&q=80&w=600",
+            "image": "/images/caffe-latte.png",
             "customizations": [
                 "Change Milk",
                 "Add Espresso Shot"
@@ -77,7 +77,7 @@
                 "grande": 480,
                 "venti": 520
             },
-            "image": "https://images.unsplash.com/photo-1515823664972-6d90e8ed9e85?auto=format&fit=crop&q=80&w=600",
+            "image": "/images/matcha-green-tea-latte.png",
             "customizations": [
                 "Change Milk",
                 "Extra Matcha"
@@ -94,7 +94,7 @@
                 "grande": 270,
                 "venti": 270
             },
-            "image": "https://images.unsplash.com/photo-1555507036-ab1f40388085?auto=format&fit=crop&q=80&w=600",
+            "image": "/images/croissant.png",
             "customizations": [
                 "Warmed"
             ]
