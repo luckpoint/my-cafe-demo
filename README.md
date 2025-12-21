@@ -1,98 +1,86 @@
-# ☕ My Coffee - Starbucks Style Demo
+# ☕ My Coffee - Starbucks Style Demo (Cloudflare Workers Edition)
 
-A modern coffee shop web application inspired by Starbucks, built with Vite, Vanilla JavaScript, and Tailwind CSS v4. This demo project showcases a fully functional e-commerce experience with product browsing, cart management, and user authentication.
+A modern coffee shop web application inspired by Starbucks, built with **Hono**, **Cloudflare Workers**, **D1**, **Auth0**, and **Stripe**. This project showcases a fully functional server-side rendered (SSR) e-commerce experience.
 
-![Project Status](https://img.shields.io/badge/status-demo-green)
-![Vite](https://img.shields.io/badge/Vite-7.x-646CFF?logo=vite&logoColor=white)
+![Project Status](https://img.shields.io/badge/status-active-green)
+![Hono](https://img.shields.io/badge/Hono-4.x-FF0055?logo=hono&logoColor=white)
+![Cloudflare Workers](https://img.shields.io/badge/Cloudflare_Workers-v3-F38020?logo=cloudflare-workers&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.x-06B6D4?logo=tailwindcss&logoColor=white)
 
 ---
 
 ## ✨ Features
 
-- 🏠 **Home Page** - Hero section with call-to-action and feature highlights
-- 🛒 **Product Catalog** - Browse coffee, tea, food, and merchandise
-- 🔍 **Search & Filter** - Search products by name and filter by category
-- 📄 **Product Details** - View detailed product information with size selection
-- 🛍️ **Shopping Cart** - Add items, update quantities, and manage your order
-- 👤 **User Profile** - View user information (demo authentication)
-- 📱 **Responsive Design** - Optimized for desktop and mobile devices
-- 💾 **Persistent Cart** - Cart data stored in LocalStorage
+- 🏠 **Home Page** - Server-side rendered hero section and featured products
+- 🛒 **Product Catalog** - Browse coffee, tea, food, and merchandise (managed via JSON)
+- 🛍️ **Shopping Cart** - Manage items with persistency via cookies
+- 💳 **Stripe Integration** - Secure checkout flow with Stripe Checkout and Webhooks
+- 👤 **Auth0 Authentication** - Secure OIDC-based user login and profile management
+- 📜 **Order History** - Persistent order tracking using **Cloudflare D1** (SQLite)
+- 📱 **Responsive Design** - Optimized for desktop and mobile using Tailwind CSS v4
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| [Vite](https://vitejs.dev/) | 7.x | Build tool and development server |
-| Vanilla JavaScript | ES2020+ | Core application logic (ES Modules) |
-| [Tailwind CSS](https://tailwindcss.com/) | 4.x | Utility-first CSS framework |
-| [Axios](https://axios-http.com/) | 1.x | HTTP client for API requests |
-| [json-server](https://github.com/typicode/json-server) | 1.x | Mock REST API server |
+| Technology | Purpose |
+|------------|---------|
+| [Hono](https://hono.dev/) | Ultrafast web framework for the Edges |
+| [Cloudflare Workers](https://workers.cloudflare.com/) | Serverless execution environment |
+| [Cloudflare D1](https://developers.cloudflare.com/d1/) | Serverless SQL database (SQLite) for orders |
+| [Auth0](https://auth0.com/) | Identity and Access Management (OIDC) |
+| [Stripe](https://stripe.com/) | Payment processing and checkout |
+| [Tailwind CSS v4](https://tailwindcss.com/) | Utility-first CSS framework |
 
 ---
 
 ## 📋 Prerequisites
 
-Before you begin, ensure you have the following installed:
-
-- **Node.js** (v18.0.0 or higher recommended)
-- **npm** (v9.0.0 or higher) or **yarn**
-
----
-
-## 🚀 Installation
-
-1. **Clone the repository**
-
-   ```bash
-   git clone https://github.com/luckpoint/my-cafe-demo.git
-   cd my-cafe-demo
-   ```
-
-2. **Install dependencies**
-
-   ```bash
-   npm install
-   ```
+- **Node.js** (v18+)
+- **Cloudflare Account** (for D1 and Workers deployment)
+- **Stripe Account** (for payments)
+- **Auth0 Account** (for authentication)
 
 ---
 
-## 💻 Running the Application
+## 🚀 Getting Started
 
-You need to run **two servers** simultaneously: the Vite development server and the json-server for the mock API.
-
-### Option 1: Run in separate terminals
-
-**Terminal 1 - Start the mock API server:**
+### 1. Installation
 
 ```bash
-npm run server
+git clone https://github.com/luckpoint/my-cafe-demo.git
+cd my-cafe-demo
+npm install
 ```
 
-This starts json-server on `http://localhost:3001`
+### 2. Environment Variables
 
-**Terminal 2 - Start the development server:**
+Create a `.dev.vars` file for local development:
+
+```env
+AUTH0_DOMAIN=your-domain.auth0.com
+AUTH0_CLIENT_ID=your-client-id
+AUTH0_CLIENT_SECRET=your-client-secret
+AUTH0_BASE_URL=http://localhost:8787
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+```
+
+### 3. Database Setup (D1)
+
+Initialize the local D1 database:
+
+```bash
+npx wrangler d1 execute my-cafe-demo-db --local --file=./migrations/0001_create_orders_table.sql
+```
+
+### 4. Running Locally
 
 ```bash
 npm run dev
 ```
 
-This starts the Vite dev server on `http://localhost:5173`
-
-### Option 2: Run both concurrently
-
-You can use tools like `concurrently` or simply open two terminal windows/tabs.
-
-### Available Scripts
-
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start Vite development server |
-| `npm run build` | Build for production |
-| `npm run preview` | Preview production build |
-| `npm run server` | Start json-server on port 3001 |
+The application will be available at `http://localhost:8787`.
 
 ---
 
@@ -101,134 +89,38 @@ You can use tools like `concurrently` or simply open two terminal windows/tabs.
 ```
 my-cafe-demo/
 ├── src/
-│   ├── components/         # Reusable UI components
-│   │   ├── Header.js       # Navigation header
-│   │   └── Footer.js       # Page footer
-│   ├── pages/              # Page-specific JavaScript
-│   │   ├── home.js         # Home page logic
-│   │   ├── products.js     # Product listing logic
-│   │   ├── product-detail.js # Product detail page
-│   │   ├── cart.js         # Shopping cart logic
-│   │   └── profile.js      # User profile page
-│   ├── services/           # API communication layer
-│   │   ├── api.js          # Axios instance configuration
-│   │   └── productService.js # Product-related API calls
-│   ├── utils/              # Utility functions
-│   │   ├── auth.js         # Authentication helpers
-│   │   └── cart.js         # Cart management utilities
-│   ├── index.css           # Global styles with Tailwind
-│   └── main.js             # Application entry point
+│   ├── components/         # Hono JSX components (Layout, Header, Footer, etc.)
+│   ├── routes/             # Hono route handlers (home, products, cart, api, etc.)
+│   ├── services/           # Business logic (orderService, productService, stripeService)
+│   ├── types/              # TypeScript definitions
+│   ├── middleware/         # Custom middlewares
+│   └── index.tsx           # Application entry point & Hono app configuration
 ├── public/
-│   └── images/             # Static image assets
-├── index.html              # Home page
-├── products.html           # Product listing page
-├── product-detail.html     # Product detail page
-├── cart.html               # Shopping cart page
-├── profile.html            # User profile page
-├── db.json                 # Mock database for json-server
-├── vite.config.js          # Vite configuration
-├── package.json            # Project dependencies
-└── Design.md               # Design specifications
+│   ├── css/                # Tailwind CSS output
+│   └── images/             # Static assets
+├── migrations/             # D1 database migration files
+├── db.json                 # Product data source
+├── wrangler.json           # Cloudflare Workers configuration
+└── package.json            # Dependencies and scripts
 ```
 
 ---
 
-## 🗺️ Available Pages & Routes
+## 🏗️ Deployment
 
-| Page | Route | Description | Auth Required |
-|------|-------|-------------|---------------|
-| Home | `/` or `/index.html` | Landing page with hero section | ❌ |
-| Products | `/products.html` | Product catalog with search & filter | ❌ |
-| Product Detail | `/product-detail.html?id={id}` | Individual product page | ❌ |
-| Cart | `/cart.html` | Shopping cart management | ✅ |
-| Profile | `/profile.html` | User profile information | ✅ |
+To deploy to Cloudflare Workers:
 
----
+```bash
+npm run deploy
+```
 
-## 🔐 Demo Authentication
-
-This project uses a simplified demo authentication system stored in LocalStorage.
-
-### Demo Credentials
-
-| Field | Value |
-|-------|-------|
-| Name | Demo User |
-| Email | demo@example.com |
-
-### How to Login
-
-1. Click the **Login** button in the header
-2. You will be automatically logged in as "Demo User"
-3. Access protected pages (Cart, Profile)
-
-### How to Logout
-
-1. Click on your profile avatar in the header
-2. Select **Logout**
-
-> **Note:** This is a demo authentication system. In a production environment, you would implement proper authentication with a backend server.
-
----
-
-## 📊 API Endpoints
-
-The json-server provides the following REST API endpoints on `http://localhost:3001`:
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/products` | Get all products |
-| GET | `/products/:id` | Get product by ID |
-| GET | `/products?category={category}` | Filter by category |
-| GET | `/products?q={query}` | Search products |
-
-### Product Categories
-
-- `coffee` - Coffee beverages
-- `tea` - Tea beverages
-- `food` - Food items
-- `merchandise` - Merchandise
+> **Note:** Ensure you have configured the D1 database and secret variables in the Cloudflare Dashboard or via `wrangler secret`.
 
 ---
 
 ## 📸 Screenshots
 
-### Home Page
-*Hero section with featured content and call-to-action buttons*
-
-### Products Page
-*Product grid with search bar and category filters*
-
-### Product Detail
-*Product information with size selection and add-to-cart functionality*
-
-### Shopping Cart
-*Cart items with quantity controls and total calculation*
-
-> 💡 **Tip:** Add actual screenshots by placing images in the repository and updating the paths above.
-
----
-
-## 🎨 Design
-
-The application follows a Starbucks-inspired design with:
-
-- **Primary Color:** Green (`#00704A`)
-- **Clean, modern UI** with card-based layouts
-- **Responsive grid system** for product displays
-- **Size-based pricing** (Short, Tall, Grande, Venti)
-
-For detailed design specifications, see [Design.md](./Design.md).
-
----
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+*(Add your screenshots here)*
 
 ---
 
@@ -238,14 +130,6 @@ This project is licensed under the **ISC License**.
 
 ---
 
-## 🙏 Acknowledgments
-
-- Design inspired by [Starbucks](https://www.starbucks.com/)
-- Product images from [Unsplash](https://unsplash.com/)
-- Icons and avatars from [UI Avatars](https://ui-avatars.com/)
-
----
-
 <p align="center">
-  Made with ☕ and 💚
+  Made with ☕ and Hono
 </p>

@@ -11,7 +11,7 @@ export interface CheckoutLineItem {
 
 export function createStripeClient(secretKey: string): Stripe {
     return new Stripe(secretKey, {
-        apiVersion: '2024-12-18.acacia',
+        apiVersion: '2025-12-15.clover',
         httpClient: Stripe.createFetchHttpClient()
     })
 }
@@ -22,7 +22,8 @@ export const stripeService = {
         items: CheckoutLineItem[],
         successUrl: string,
         cancelUrl: string,
-        customerEmail?: string
+        customerEmail?: string,
+        userId?: string
     ): Promise<Stripe.Checkout.Session> {
         const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = items.map(item => ({
             price_data: {
@@ -30,6 +31,10 @@ export const stripeService = {
                 product_data: {
                     name: `${item.name} (${item.size})`,
                     images: item.image ? [item.image] : undefined,
+                    metadata: {
+                        product_id: item.productId,
+                        size: item.size,
+                    },
                 },
                 unit_amount: item.price,
             },
@@ -44,6 +49,7 @@ export const stripeService = {
             cancel_url: cancelUrl,
             locale: 'ja',
             ...(customerEmail && { customer_email: customerEmail }),
+            ...(userId && { metadata: { user_id: userId } }),
         }
 
         return stripe.checkout.sessions.create(sessionParams)
@@ -55,7 +61,7 @@ export const stripeService = {
         signature: string,
         webhookSecret: string
     ): Promise<Stripe.Event> {
-        return stripe.webhooks.constructEvent(payload, signature, webhookSecret)
+        return await stripe.webhooks.constructEventAsync(payload, signature, webhookSecret)
     },
 
     async getSession(stripe: Stripe, sessionId: string): Promise<Stripe.Checkout.Session> {

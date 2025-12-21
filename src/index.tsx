@@ -33,6 +33,7 @@ import home from './routes/home'
 import products from './routes/products'
 import cart from './routes/cart'
 import profile from './routes/profile'
+import orders from './routes/orders'
 import api from './routes/api'
 import checkout from './routes/checkout'
 import checkoutPages from './routes/checkout-pages'
@@ -42,9 +43,23 @@ app.route('/', home)
 app.route('/products', products)
 app.route('/cart', cart)
 app.route('/profile', profile)
+app.route('/orders', orders)
 app.route('/api', api)
 app.route('/api/checkout', checkout)
 app.route('/checkout', checkoutPages)
 app.route('/api/webhook', webhook)
+
+import { orderService } from './services/orderService'
+app.get('/debug/orders', async (c: any) => {
+    const userId = c.req.query('userId')
+    if (!userId) return c.json({ error: 'userId required' })
+    try {
+        const orders = await orderService.getOrdersByUserId(c.env.DB, userId)
+        return c.json({ count: orders.length, orders })
+    } catch (e: any) {
+        return c.json({ error: e.message })
+    }
+})
+
 
 export default app

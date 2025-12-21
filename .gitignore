@@ -126,4 +126,11 @@ dist-ssr
 # Cloudflare Workers
 .wrangler
 .dev.vars
+.dev.vars.*
 
+# Database backups (may contain personal data)
+d1_backup.sql
+*.backup.sql
+
+# Playwright MCP screenshots
+.playwright-mcp/

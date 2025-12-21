@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "wrangler dev",
-    "deploy": "wrangler deploy",
+    "dev": "wrangler dev --env local",
+    "dev:production": "wrangler dev --env production",
+    "deploy": "wrangler deploy --env production",
     "limit-export": "wrangler types",
     "build:css": "npx tailwindcss -i public/css/input.css -o public/css/styles.css --minify"
   },

@@ -309,15 +309,147 @@ Webhookが呼ばれると `console.log` の出力がリアルタイムで表示�
 
 ### ローカル環境
 
+#### 環境変数ファイル
+
+| ファイル | 用途 |
+|---------|------|
+| `.dev.vars.local` | ローカル開発用（stripe listen使用時） |
+| `.dev.vars.production` | Cloudflare本番用（参照用） |
+
+#### セットアップ手順
+
 ```bash
-# ターミナル1: 開発サーバー
+# 1. Stripe CLIインストール（未インストールの場合）
+brew install stripe/stripe-cli/stripe
+
+# 2. Stripeにログイン
+stripe login
+```
+
+#### テスト実行
+
+```bash
+# ターミナル1: Stripe CLIでWebhookをローカルに転送
+stripe listen --forward-to localhost:8789/api/webhook
+# 出力される whsec_... を .dev.vars.local にコピー
+
+# ターミナル2: 開発サーバー起動（.dev.vars.local を使用）
 npm run dev
 
-# ターミナル2: Stripe CLIでWebhookをローカルに転送
-stripe listen --forward-to localhost:8787/api/webhook
-
-# ターミナル3: テストイベント送信
+# ターミナル3: テストイベント送信（オプション）
 stripe trigger checkout.session.completed
 ```
 
-**注意**: ローカルテスト時は `stripe listen` が出力する `whsec_...` を `.dev.vars` の `STRIPE_WEBHOOK_SECRET` に設定してください。
+#### npmスクリプト
+
+| コマンド | 説明 |
+|---------|------|
+| `npm run dev` | ローカル開発（`--env local`、`.dev.vars.local`使用） |
+| `npm run dev:production` | production設定でローカル実行 |
+| `npm run deploy` | Cloudflareにデプロイ |
+
+**注意**:
+- ローカルテスト時は `stripe listen` が出力する `whsec_...` を `.dev.vars.local` の `STRIPE_WEBHOOK_SECRET` に設定してください
+- 開発サーバーはポート `8789` で起動します
+
+---
+
+## Stripeへのデータ送信の仕組み
+
+### データ送信フロー
+
+```
+┌─────────────┐      ┌─────────────────────┐      ┌─────────────┐
+│  フロント   │ POST │  バックエンド       │ API  │   Stripe    │
+│  (カート)   │ ──→  │  (Hono/Workers)     │ ──→  │   サーバー  │
+│             │      │                     │      │             │
+│ カート情報  │      │ stripe.checkout.    │      │ Checkout    │
+│ を送信      │      │ sessions.create()   │      │ Session作成 │
+└─────────────┘      └─────────────────────┘      └─────────────┘
+                                                         │
+                                                         ▼
+                                               ┌─────────────────┐
+                                               │ ユーザーを      │
+                                               │ Stripe決済画面  │
+                                               │ にリダイレクト  │
+                                               └─────────────────┘
+```
+
+Stripe SDKはバックエンド専用で、**シークレットキー**を使ってAPI通信します。フロントエンドから直接Stripeにデータを送ることはセキュリティ上行いません。
+
+### Checkout Sessionへ送信するデータ
+
+| データ | 送信先 | 備考 |
+|--------|--------|------|
+| 商品名 | `product_data.name` | サイズ付きで送信 |
+| 画像URL | `product_data.images` | **完全なHTTPS URLが必要** |
+| 単価 | `price_data.unit_amount` | 日本円で送信 |
+| 数量 | `quantity` | |
+| ユーザーメール | `customer_email` | Auth0セッションから取得 |
+| ユーザーID | `metadata.user_id` | Webhook処理時に使用 |
+
+### 実装コード
+
+#### 1. チェックアウト処理（`src/routes/checkout.ts`）
+
+```typescript
+const lineItems: CheckoutLineItem[] = cartItems.map(item => {
+    const sizeKey = item.size || 'tall'
+    const price = typeof item.price === 'object' ? item.price[sizeKey] : item.price
+    return {
+        productId: item.id,
+        name: item.name,
+        price: price,           // 単価
+        quantity: item.quantity, // 数量
+        size: sizeKey,
+        image: item.image?.startsWith('http')  // 画像URL
+            ? item.image
+            : `${baseUrl}${item.image}`
+    }
+})
+```
+
+#### 2. Stripe Checkout Session作成（`src/services/stripeService.ts`）
+
+```typescript
+const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = items.map(item => ({
+    price_data: {
+        currency: 'jpy',
+        product_data: {
+            name: `${item.name} (${item.size})`,  // 商品名
+            images: item.image ? [item.image] : undefined,  // 画像URL配列
+            metadata: {
+                product_id: item.productId,
+                size: item.size,
+            },
+        },
+        unit_amount: item.price,  // 単価（円）
+    },
+    quantity: item.quantity,      // 数量
+}))
+
+const sessionParams: Stripe.Checkout.SessionCreateParams = {
+    mode: 'payment',
+    payment_method_types: ['card'],
+    line_items: lineItems,
+    success_url: successUrl,
+    cancel_url: cancelUrl,
+    locale: 'ja',
+    ...(customerEmail && { customer_email: customerEmail }),  // ユーザーメール
+    ...(userId && { metadata: { user_id: userId } }),          // ユーザーID
+}
+```
+
+### 画像表示の注意事項
+
+Stripe決済画面で商品画像を表示するには、**外部からアクセス可能なHTTPS URL**が必要です。
+
+| 画像パス | Stripe画面での表示 | 理由 |
+|----------|-------------------|------|
+| `https://images.unsplash.com/...` | ✅ 表示される | パブリックURL |
+| `https://your-domain.com/images/product.png` | ✅ 表示される | パブリックURL |
+| `http://localhost:8787/images/product.png` | ❌ 表示されない | Stripeサーバーからアクセス不可 |
+| `/images/product.png` | ❌ 表示されない | 相対パスはStripeで解決不可 |
+
+> [!NOTE]
+> ローカル開発環境では画像が表示されないのは想定通りの動作です。本番デプロイ後は正常に表示されます。

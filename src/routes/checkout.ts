@@ -49,7 +49,8 @@ app.post('/create-session', async (c) => {
             lineItems,
             `${baseUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
             `${baseUrl}/checkout/cancel`,
-            customerEmail
+            customerEmail,
+            session?.user?.sub
         )
 
         if (c.req.header('Accept')?.includes('text/html')) {

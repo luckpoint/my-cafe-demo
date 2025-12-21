@@ -27,6 +27,31 @@ export interface CartItem extends Product {
     size: 'short' | 'tall' | 'grande' | 'venti'
 }
 
+export interface Order {
+    id: string
+    user_id: string
+    user_email: string
+    stripe_payment_intent_id?: string
+    total_amount: number
+    currency: string
+    status: string
+    created_at: string
+}
+
+export interface OrderItem {
+    id: number
+    order_id: string
+    product_id: string
+    product_name: string
+    size: 'short' | 'tall' | 'grande' | 'venti'
+    unit_price: number
+    quantity: number
+}
+
+export interface OrderWithItems extends Order {
+    items: OrderItem[]
+}
+
 export interface Bindings {
     AUTH0_DOMAIN: string
     AUTH0_CLIENT_ID: string
@@ -34,6 +59,7 @@ export interface Bindings {
     AUTH0_BASE_URL: string
     STRIPE_SECRET_KEY: string
     STRIPE_WEBHOOK_SECRET: string
+    DB: D1Database
 }
 
 export interface Variables {

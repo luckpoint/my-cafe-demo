@@ -1,11 +1,45 @@
 {
-    "name": "my-cafe-demo",
-    "main": "src/index.tsx",
-    "compatibility_date": "2025-01-01",
-    "assets": {
-        "directory": "./public"
-    },
-    "compatibility_flags": [
-        "nodejs_compat"
-    ]
+	"name": "my-cafe-demo",
+	"main": "src/index.tsx",
+	"compatibility_date": "2025-01-01",
+	"assets": {
+		"directory": "./public"
+	},
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "my-cafe-demo-db",
+			"database_id": "233ee0dc-3e8b-40fd-8827-752d2f872d27"
+		}
+	],
+	"env": {
+		"local": {
+			"vars": {
+				"ENVIRONMENT": "local"
+			},
+			"d1_databases": [
+				{
+					"binding": "DB",
+					"database_name": "my-cafe-demo-db",
+					"database_id": "233ee0dc-3e8b-40fd-8827-752d2f872d27"
+				}
+			]
+		},
+		"production": {
+			"name": "my-cafe-demo",
+			"vars": {
+				"ENVIRONMENT": "production"
+			},
+			"d1_databases": [
+				{
+					"binding": "DB",
+					"database_name": "my-cafe-demo-db",
+					"database_id": "233ee0dc-3e8b-40fd-8827-752d2f872d27"
+				}
+			]
+		}
+	}
 }

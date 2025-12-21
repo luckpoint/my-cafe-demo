@@ -37,14 +37,17 @@ export const Header: FC<HeaderProps> = ({ user, cartCount = 0, currentPath = '/'
                                     <img src={user.picture || "https://ui-avatars.com/api/?name=" + user.name + "&background=00704A&color=fff"} class="h-8 w-8 rounded-full border border-gray-200" alt={user.name} />
                                     <span class="text-sm font-medium hidden lg:block">{user.name}</span>
                                 </button>
-                                {/* Dropdown via CSS hover */}
-                                <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden group-hover:block transition-all duration-200 ring-1 ring-black ring-opacity-5">
-                                    <div class="px-4 py-2 border-b border-gray-100">
-                                        <p class="text-sm">Signed in as</p>
-                                        <p class="text-sm font-bold truncate">{user.email}</p>
+                                {/* Dropdown via CSS hover - pt-2 creates invisible hover bridge */}
+                                <div class="absolute right-0 top-full pt-2 w-48 hidden group-hover:block">
+                                    <div class="bg-white rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5">
+                                        <div class="px-4 py-2 border-b border-gray-100">
+                                            <p class="text-sm">Signed in as</p>
+                                            <p class="text-sm font-bold truncate">{user.email}</p>
+                                        </div>
+                                        <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Your Profile</a>
+                                        <a href="/orders" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Order History</a>
+                                        <a href="/auth/logout" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-red-600">Sign out</a>
                                     </div>
-                                    <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Your Profile</a>
-                                    <a href="/auth/logout" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-red-600">Sign out</a>
                                 </div>
                             </div>
                         ) : (
