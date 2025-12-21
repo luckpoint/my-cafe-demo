@@ -7,6 +7,8 @@ A modern coffee shop web application inspired by Starbucks, built with **Hono**,
 ![Cloudflare Workers](https://img.shields.io/badge/Cloudflare_Workers-v3-F38020?logo=cloudflare-workers&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.x-06B6D4?logo=tailwindcss&logoColor=white)
 
+
+You can check [My Coffee Demo](https://my-cafe-demo.shunsuke-tsutsui41.workers.dev/orders).
 ---
 
 ## ✨ Features
@@ -18,6 +20,14 @@ A modern coffee shop web application inspired by Starbucks, built with **Hono**,
 - 👤 **Auth0 Authentication** - Secure OIDC-based user login and profile management
 - 📜 **Order History** - Persistent order tracking using **Cloudflare D1** (SQLite)
 - 📱 **Responsive Design** - Optimized for desktop and mobile using Tailwind CSS v4
+
+---
+
+## 💳 Stripe Integration Details
+
+- **Checkout Session**: Server-side session creation
+- **Webhook Handling**: `checkout.session.completed` event processing
+- **Order Persistence**: Successful payments trigger D1 order creation
 
 ---
 
@@ -120,7 +130,9 @@ npm run deploy
 
 ## 📸 Screenshots
 
-*(Add your screenshots here)*
+<img width="945" height="898" alt="image" src="https://github.com/user-attachments/assets/e44567d5-1885-44a7-960b-ba326c3abaf4" />
+<img width="979" height="669" alt="image" src="https://github.com/user-attachments/assets/703b8895-5aed-45a4-b0f7-f85f3b809da2" />
+
 
 ---
 
