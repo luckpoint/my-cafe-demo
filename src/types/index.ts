@@ -57,6 +57,7 @@ export interface Bindings {
     AUTH0_CLIENT_ID: string
     AUTH0_CLIENT_SECRET: string
     AUTH0_BASE_URL: string
+    AUTH0_SECRET: string
     STRIPE_SECRET_KEY: string
     STRIPE_WEBHOOK_SECRET: string
     DB: D1Database

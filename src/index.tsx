@@ -7,13 +7,7 @@ const app = new Hono<OIDCEnv>()
 
 // Auth0 Middleware
 app.use('*', async (c, next) => {
-    const { AUTH0_DOMAIN, AUTH0_CLIENT_ID, AUTH0_CLIENT_SECRET, AUTH0_BASE_URL } = c.env
-    console.log('--- Auth0 Middleware Debug ---')
-    console.log('Request URL:', c.req.url)
-    console.log('AUTH0_DOMAIN:', AUTH0_DOMAIN)
-    console.log('AUTH0_CLIENT_ID:', AUTH0_CLIENT_ID ? 'Exists' : 'Missing')
-    console.log('AUTH0_BASE_URL:', AUTH0_BASE_URL)
-    console.log('------------------------------')
+    const { AUTH0_DOMAIN, AUTH0_CLIENT_ID, AUTH0_CLIENT_SECRET, AUTH0_BASE_URL, AUTH0_SECRET } = c.env
 
     const authMiddleware = auth({
         domain: AUTH0_DOMAIN,
@@ -22,7 +16,7 @@ app.use('*', async (c, next) => {
         baseURL: AUTH0_BASE_URL,
         authRequired: false,
         session: {
-            secret: "password_at_least_32_characters_long",
+            secret: AUTH0_SECRET,
         },
         idpLogout: true
     })
