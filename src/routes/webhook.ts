@@ -58,6 +58,16 @@ app.post('/', async (c) => {
 
                 const fullSession = await stripeService.getSession(stripe, session.id)
 
+                // Extract receipt_url from the latest charge
+                let receiptUrl: string | undefined
+                const paymentIntent = fullSession.payment_intent
+                if (typeof paymentIntent === 'object' && paymentIntent !== null) {
+                    const latestCharge = paymentIntent.latest_charge
+                    if (typeof latestCharge === 'object' && latestCharge !== null) {
+                        receiptUrl = latestCharge.receipt_url ?? undefined
+                    }
+                }
+
                 await orderService.createOrder(c.env.DB, {
                     id: session.id,
                     userId,
@@ -65,6 +75,7 @@ app.post('/', async (c) => {
                     stripePaymentIntentId: typeof fullSession.payment_intent === 'string'
                         ? fullSession.payment_intent
                         : fullSession.payment_intent?.id,
+                    receiptUrl,
                     totalAmount: session.amount_total || 0,
                     currency: session.currency || 'jpy',
                     status: 'completed'

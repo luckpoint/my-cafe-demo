@@ -5,6 +5,7 @@ export interface CreateOrderParams {
     userId: string
     userEmail: string
     stripePaymentIntentId?: string
+    receiptUrl?: string
     totalAmount: number
     currency?: string
     status?: string
@@ -29,13 +30,14 @@ export const orderService = {
 
     async createOrder(db: D1Database, params: CreateOrderParams): Promise<void> {
         await db.prepare(`
-            INSERT INTO orders (id, user_id, user_email, stripe_payment_intent_id, total_amount, currency, status)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO orders (id, user_id, user_email, stripe_payment_intent_id, receipt_url, total_amount, currency, status)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         `).bind(
             params.id,
             params.userId,
             params.userEmail,
             params.stripePaymentIntentId || null,
+            params.receiptUrl || null,
             params.totalAmount,
             params.currency || 'jpy',
             params.status || 'completed'

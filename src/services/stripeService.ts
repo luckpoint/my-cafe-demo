@@ -66,7 +66,7 @@ export const stripeService = {
 
     async getSession(stripe: Stripe, sessionId: string): Promise<Stripe.Checkout.Session> {
         return stripe.checkout.sessions.retrieve(sessionId, {
-            expand: ['line_items', 'payment_intent']
+            expand: ['line_items', 'payment_intent.latest_charge']
         })
     }
 }

@@ -32,6 +32,7 @@ export interface Order {
     user_id: string
     user_email: string
     stripe_payment_intent_id?: string
+    receipt_url?: string
     total_amount: number
     currency: string
     status: string

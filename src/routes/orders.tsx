@@ -13,7 +13,8 @@ const formatDate = (dateString: string) => {
     // Convert to ISO 8601 format with 'Z' suffix to indicate UTC
     const isoString = dateString.replace(' ', 'T') + 'Z'
     const date = new Date(isoString)
-    return date.toLocaleDateString('ja-JP', {
+    return date.toLocaleString('ja-JP', {
+        timeZone: 'Asia/Tokyo',
         year: 'numeric',
         month: 'long',
         day: 'numeric',
@@ -56,7 +57,19 @@ const OrderCard = ({ order }: { order: OrderWithItems }) => (
                 </p>
             </div>
             <div class="text-right">
-                <StatusBadge status={order.status} />
+                <div class="flex items-center justify-end gap-2">
+                    <StatusBadge status={order.status} />
+                    {order.receipt_url && (
+                        <a
+                            href={order.receipt_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-xs font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                        >
+                            領収書を表示
+                        </a>
+                    )}
+                </div>
                 <p class="mt-2 text-lg font-bold text-gray-900">
                     {formatPrice(order.total_amount)}
                 </p>
